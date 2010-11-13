@@ -15,11 +15,11 @@ type Initializer interface {
 type RandomInitializer struct{}
 
 func NewRandomInitializer() Initializer {
+	rand.Seed(time.Nanoseconds())
 	return new(RandomInitializer)
 }
 
 func (init *RandomInitializer) NewGenome(len int) (g Genome) {
-	rand.Seed(time.Nanoseconds())
 	g = make(Genome, len)
 	for i := range g {
 		g[i] = rand.Float64()
