@@ -25,3 +25,19 @@ func (p *Population) NormalizeFitness() {
 	}
 }
 
+// The Less() function of sort.Interface
+func (p *Population) Less(i, j int) bool {
+	return (*p)[i].Fitness < (*p)[j].Fitness
+}
+
+// The Len() function of sort.Interface
+func (p *Population) Len() int {
+	return len(*p)
+}
+
+// The Swap() function of sort.Interface
+func (p *Population) Swap(i, j int) {
+	(*p)[i], (*p)[j] = (*p)[j], (*p)[i]
+}
+
+
