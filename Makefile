@@ -13,5 +13,6 @@ GOFILES=\
 	evaluator.go\
 	selector.go\
 	breeder.go\
+	mutator.go\
 
 include $(GOROOT)/src/Make.pkg

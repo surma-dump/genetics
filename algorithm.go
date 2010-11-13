@@ -16,6 +16,5 @@ type Algorithm struct {
 	Evaluator      Evaluator
 	Selector       Selector
 	Breeder        Breeder
+	Mutator        Mutator
 }
-
-

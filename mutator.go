@@ -9,6 +9,10 @@ type Mutator interface {
 // The NopMutator does nothing
 type NopMutator struct{}
 
+func NewNopMutator() Mutator {
+	return new(NopMutator)
+}
+
 func (n *NopMutator) Mutate(s Subject) Subject {
 	return s
 }
