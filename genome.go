@@ -10,7 +10,7 @@ func (g *Genome) Len() int {
 
 // Creates a deep copy of the genome
 func (g *Genome) Copy() (ng Genome) {
-	ng = make(Genome, ng.Len())
+	ng = make(Genome, (*g).Len())
 	copy(ng, *g)
 	return
 }
