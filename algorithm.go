@@ -9,8 +9,9 @@ package genetics
 
 // All the single parts stacked together
 // result in a runnable genetic algorithm
+// The population size is soley defined by
+// the size of the population slice
 type Algorithm struct {
-	PopulationSize int
 	GenomeLength   int
 	Population     Population
 	Initializer    Initializer
@@ -20,10 +21,15 @@ type Algorithm struct {
 	Mutator        Mutator
 }
 
+// Returns the size of the population array
+func (a *Algorithm) PopulationSize() int {
+	return len(a.Population)
+}
+
 // Starts a new population of size PopulationSize
 // and inits every subject using the Initializer
 func (a *Algorithm) Init() {
-	a.Population = make(Population, a.PopulationSize)
+	a.Population = make(Population, a.PopulationSize())
 	for i := range a.Population {
 		a.Population[i] = Subject{Genome: a.Initializer.NewGenome(a.GenomeLength)}
 	}
