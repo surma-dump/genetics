@@ -7,5 +7,4 @@ type Fitness float64
 // or many subjects. 
 type Evaluator interface {
 	Evaluate(g Subject)
-	EvaluateAll(g Population)
 }
