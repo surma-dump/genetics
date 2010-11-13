@@ -44,10 +44,11 @@ func (a *Algorithm) Next() {
 		newpop[i] = a.Mutator.Mutate(newpop[i])
 	}
 	a.Population = newpop
+	a.evaluateAll()
 }
 
 func (a *Algorithm) evaluateAll() {
 	for i := range a.Population {
-		a.Evaluator.Evaluate(a.Population[i])
+		a.Population[i].Fitness = a.Evaluator.Evaluate(a.Population[i])
 	}
 }
