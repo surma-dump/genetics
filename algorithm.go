@@ -12,7 +12,7 @@ package genetics
 type Algorithm struct {
 	PopulationSize int
 	GenomeLength   int
-	population     Population
+	Population     Population
 	Initializer    Initializer
 	Evaluator      Evaluator
 	Selector       Selector
@@ -23,9 +23,9 @@ type Algorithm struct {
 // Starts a new population of size PopulationSize
 // and inits every subject using the Initializer
 func (a *Algorithm) Init() {
-	a.population = make(Population, a.PopulationSize)
-	for i := range a.population {
-		a.population[i] = Subject{Genome: a.Initializer.NewGenome(a.GenomeLength)}
+	a.Population = make(Population, a.PopulationSize)
+	for i := range a.Population {
+		a.Population[i] = Subject{Genome: a.Initializer.NewGenome(a.GenomeLength)}
 	}
 	a.evaluateAll()
 }
@@ -33,20 +33,15 @@ func (a *Algorithm) Init() {
 // Creates the next generation
 // At this point, the populations has to be evaluated already
 func (a *Algorithm) Next() {
-	newpop := a.Breeder.Breed(a.population, a.Selector)
+	newpop := a.Breeder.Breed(a.Population, a.Selector)
 	for i := range newpop {
 		newpop[i] = a.Mutator.Mutate(newpop[i])
 	}
-	a.population = newpop
-}
-
-// Returns the current population
-func (a *Algorithm) Population() Population {
-	return a.population
+	a.Population = newpop
 }
 
 func (a *Algorithm) evaluateAll() {
-	for i := range a.population {
-		a.Evaluator.Evaluate(a.population[i])
+	for i := range a.Population {
+		a.Evaluator.Evaluate(a.Population[i])
 	}
 }
