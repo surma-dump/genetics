@@ -30,12 +30,10 @@ func (sel *StochasticSelector) Select(num int, population Population) (p Populat
 func getSubjectByProbability(val float64, population Population) Subject {
 	sum := Fitness(0)
 	for _, subject := range population.Subjects {
-		newsum := sum + subject.Fitness
-		if sum <= Fitness(val) && Fitness(val) < newsum {
+		sum += subject.Fitness
+		if Fitness(val) < sum {
 			return subject
 		}
-
-		sum = newsum
 	}
 	return population.Subjects[population.Size()-1]
 }
