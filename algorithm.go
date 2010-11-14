@@ -39,6 +39,25 @@ func (a *Algorithm) Init() {
 }
 
 // Creates the next generation
+func (a *Algorithm) CreateNextGenerationParallel() *Population {
+	newpop := a.Breeder.Breed(a.Population, a.Selector)
+	c := make(chan int)
+	defer close(c)
+	for i := range newpop.Subjects {
+		go func() {
+			a.Mutator.Mutate(newpop.Subjects[i])
+			a.Evaluator.Evaluate(newpop.Subjects[i])
+			newpop.FitnessSum += newpop.Subjects[i].Fitness
+			c <- 1
+		}()
+	}
+	for count := 0; count < a.PopulationSize(); {
+		count += <-c
+	}
+	return newpop
+}
+
+// Creates the next generation
 func (a *Algorithm) CreateNextGeneration() *Population {
 	newpop := a.Breeder.Breed(a.Population, a.Selector)
 	for i := range newpop.Subjects {
@@ -52,4 +71,9 @@ func (a *Algorithm) CreateNextGeneration() *Population {
 // Replaces the old population with the new one
 func (a *Algorithm) Evolve() {
 	a.Population = a.CreateNextGeneration()
+}
+
+// Replaces the old population with the new one
+func (a *Algorithm) EvolveParallel() {
+	a.Population = a.CreateNextGenerationParallel()
 }
