@@ -11,31 +11,38 @@ func (s *Subject) GenomeLength() int {
 	return len(s.Genome)
 }
 
-type Population []Subject
+type Population struct {
+	Subjects   []Subject
+	FitnessSum Fitness
+}
 
 // Adjusts all fitness values so their sum is 1.0
 func (p *Population) NormalizeFitness() {
 	fitnessSum := Fitness(0.0)
-	for i := range *p {
-		fitnessSum += (*p)[i].Fitness
+	for i := range (*p).Subjects {
+		fitnessSum += (*p).Subjects[i].Fitness
 	}
 
-	for i := range *p {
-		(*p)[i].Fitness /= fitnessSum
+	for i := range (*p).Subjects {
+		(*p).Subjects[i].Fitness /= fitnessSum
 	}
 }
 
 // The Less() function of sort.Interface
 func (p *Population) Less(i, j int) bool {
-	return (*p)[i].Fitness < (*p)[j].Fitness
+	return (*p).Subjects[i].Fitness < (*p).Subjects[j].Fitness
 }
 
 // The Len() function of sort.Interface
 func (p *Population) Len() int {
-	return len(*p)
+	return len((*p).Subjects)
 }
 
 // The Swap() function of sort.Interface
 func (p *Population) Swap(i, j int) {
-	(*p)[i], (*p)[j] = (*p)[j], (*p)[i]
+	(*p).Subjects[i], (*p).Subjects[j] = (*p).Subjects[j], (*p).Subjects[i]
+}
+
+func (p *Population) Size() int {
+	return len((*p).Subjects)
 }

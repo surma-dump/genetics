@@ -23,32 +23,32 @@ type Algorithm struct {
 
 // Returns the size of the population array
 func (a *Algorithm) PopulationSize() int {
-	return len(a.Population)
+	return a.Population.Size()
 }
 
 // Starts a new population of size PopulationSize
 // and inits every subject using the Initializer
 func (a *Algorithm) Init() {
-	a.Population = make(Population, a.PopulationSize())
-	for i := range a.Population {
-		a.Population[i] = Subject{Genome: a.Initializer.NewGenome(a.GenomeLength)}
+	a.Population.Subjects = make([]Subject, a.PopulationSize())
+	sum := Fitness(0.0)
+	for i := range a.Population.Subjects {
+		a.Population.Subjects[i] = Subject{Genome: a.Initializer.NewGenome(a.GenomeLength)}
+		a.Population.Subjects[i].Fitness = a.Evaluator.Evaluate(a.Population.Subjects[i])
+		sum += a.Population.Subjects[i].Fitness
 	}
-	a.evaluateAll()
+	a.Population.FitnessSum = sum
 }
 
 // Creates the next generation
 // At this point, the populations has to be evaluated already
 func (a *Algorithm) Next() {
 	newpop := a.Breeder.Breed(a.Population, a.Selector)
-	for i := range newpop {
-		newpop[i] = a.Mutator.Mutate(newpop[i])
+	sum := Fitness(0.0)
+	for i := range newpop.Subjects {
+		newpop.Subjects[i] = a.Mutator.Mutate(newpop.Subjects[i])
+		newpop.Subjects[i].Fitness = a.Evaluator.Evaluate(newpop.Subjects[i])
+		sum += newpop.Subjects[i].Fitness
 	}
 	a.Population = newpop
-	a.evaluateAll()
-}
-
-func (a *Algorithm) evaluateAll() {
-	for i := range a.Population {
-		a.Population[i].Fitness = a.Evaluator.Evaluate(a.Population[i])
-	}
+	a.Population.FitnessSum = sum
 }

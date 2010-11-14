@@ -21,12 +21,12 @@ func NewTwoParentBreeder() Breeder {
 }
 
 func (c *TwoParentBreeder) Breed(oldpop Population, sel Selector) (newpop Population) {
-	newpop = make(Population, len(oldpop))
-	for i := range newpop {
+	newpop.Subjects = make([]Subject, oldpop.Size())
+	for i := range newpop.Subjects {
 		parents := sel.Select(2, oldpop)
-		crosspoint := int(rand.Float64() * float64(parents[0].GenomeLength()))
-		g1, g2 := crossover(parents[0].Genome, parents[1].Genome, crosspoint)
-		newpop[i] = Subject{Genome: selectAChild(g1, g2)}
+		crosspoint := int(rand.Float64() * float64(parents.Subjects[0].GenomeLength()))
+		g1, g2 := crossover(parents.Subjects[0].Genome, parents.Subjects[1].Genome, crosspoint)
+		newpop.Subjects[i] = Subject{Genome: selectAChild(g1, g2)}
 	}
 	return
 }

@@ -2,7 +2,6 @@ package genetics
 
 import (
 	"rand"
-	"sort"
 )
 
 // Selects some subjects of the population
@@ -20,21 +19,23 @@ func NewStochasticSelector() Selector {
 }
 
 func (sel *StochasticSelector) Select(num int, population Population) (p Population) {
-	p = make(Population, num)
-	population.NormalizeFitness()
-	sort.Sort(&population)
+	p.Subjects = make([]Subject, num)
 	for i := 0; i < num; i++ {
-		val := rand.Float64()
-		p[i] = getSubjectByProbability(val, population)
+		val := rand.Float64() * float64(population.FitnessSum)
+		p.Subjects[i] = getSubjectByProbability(val, population)
 	}
 	return
 }
 
 func getSubjectByProbability(val float64, population Population) Subject {
-	for i := 1; i < len(population); i++ {
-		if Fitness(val) < population[i].Fitness {
-			return population[i-1]
+	sum := Fitness(0)
+	for _, subject := range population.Subjects {
+		newsum := sum + subject.Fitness
+		if sum <= Fitness(val) && Fitness(val) < newsum {
+			return subject
 		}
+
+		sum = newsum
 	}
-	return population[len(population)-1]
+	return population.Subjects[population.Size()-1]
 }
