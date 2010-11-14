@@ -12,13 +12,13 @@ package genetics
 // The population size is soley defined by
 // the size of the population slice
 type Algorithm struct {
-	GenomeLength   int
-	Population     Population
-	Initializer    Initializer
-	Evaluator      Evaluator
-	Selector       Selector
-	Breeder        Breeder
-	Mutator        Mutator
+	GenomeLength int
+	Population   Population
+	Initializer  Initializer
+	Evaluator    Evaluator
+	Selector     Selector
+	Breeder      Breeder
+	Mutator      Mutator
 }
 
 // Returns the size of the population array

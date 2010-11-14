@@ -3,8 +3,8 @@ package genetics
 // Represents a single subject of a
 // population
 type Subject struct {
-	Genome   Genome
-	Fitness  Fitness
+	Genome  Genome
+	Fitness Fitness
 }
 
 func (s *Subject) GenomeLength() int {
@@ -39,5 +39,3 @@ func (p *Population) Len() int {
 func (p *Population) Swap(i, j int) {
 	(*p)[i], (*p)[j] = (*p)[j], (*p)[i]
 }
-
-
