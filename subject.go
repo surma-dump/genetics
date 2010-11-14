@@ -5,6 +5,8 @@ package genetics
 type Subject struct {
 	Genome  Genome
 	Fitness Fitness
+	// Stores abitrary data for others to access
+	Data    interface{}
 }
 
 func (s *Subject) GenomeLength() int {
