@@ -7,7 +7,7 @@ import (
 // Selects some subjects of the population
 type Selector interface {
 	// Selects num individuals
-	Select(num int, population Population) Population
+	Select(num int, population *Population) *Population
 }
 
 // Selects subject by stochastical criteria based on the
@@ -18,8 +18,8 @@ func NewStochasticSelector() Selector {
 	return new(StochasticSelector)
 }
 
-func (sel *StochasticSelector) Select(num int, population Population) (p Population) {
-	p.Subjects = make([]Subject, num)
+func (sel *StochasticSelector) Select(num int, population *Population) (p *Population) {
+	p = NewPopulation(num)
 	for i := 0; i < num; i++ {
 		val := rand.Float64() * float64(population.FitnessSum)
 		p.Subjects[i] = getSubjectByProbability(val, population)
@@ -27,7 +27,7 @@ func (sel *StochasticSelector) Select(num int, population Population) (p Populat
 	return
 }
 
-func getSubjectByProbability(val float64, population Population) Subject {
+func getSubjectByProbability(val float64, population *Population) *Subject {
 	sum := Fitness(0)
 	for _, subject := range population.Subjects {
 		sum += subject.Fitness

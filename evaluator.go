@@ -6,5 +6,5 @@ type Fitness float64
 // A evaluator calcualtes the fitness of one
 // or many subjects. 
 type Evaluator interface {
-	Evaluate(g Subject) Fitness
+	Evaluate(g *Subject)
 }

@@ -7,7 +7,7 @@ import (
 // A mutator has the chance of mutating the
 // subjects of a new generation
 type Mutator interface {
-	Mutate(s Subject) Subject
+	Mutate(s *Subject)
 }
 
 // The NopMutator does nothing
@@ -17,10 +17,9 @@ func NewNopMutator() Mutator {
 	return new(NopMutator)
 }
 
-func (m *NopMutator) Mutate(s Subject) Subject {
-	return s
+func (m *NopMutator) Mutate(s *Subject) {
+	return
 }
-
 
 // Resets each value in the genome
 // with a fixed probability
@@ -34,12 +33,12 @@ func NewRandomMutator(prob float64) Mutator {
 	return m
 }
 
-func (m *RandomMutator) Mutate(s Subject) Subject {
+func (m *RandomMutator) Mutate(s *Subject) {
 	for i := range s.Genome {
 		v := rand.Float64()
 		if v < m.prob {
 			s.Genome[i] = rand.Float64()
 		}
 	}
-	return s
+	return
 }

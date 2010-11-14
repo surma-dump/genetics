@@ -6,7 +6,7 @@ type Subject struct {
 	Genome  Genome
 	Fitness Fitness
 	// Stores abitrary data for others to access
-	Data    interface{}
+	Data interface{}
 }
 
 func (s *Subject) GenomeLength() int {
@@ -14,8 +14,15 @@ func (s *Subject) GenomeLength() int {
 }
 
 type Population struct {
-	Subjects   []Subject
+	Subjects   []*Subject
 	FitnessSum Fitness
+}
+
+func NewPopulation(size int) (p *Population) {
+	p = new(Population)
+	p.Subjects = make([]*Subject, size)
+	p.FitnessSum = Fitness(-1.0)
+	return
 }
 
 // Adjusts all fitness values so their sum is 1.0

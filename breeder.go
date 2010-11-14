@@ -8,7 +8,7 @@ import (
 // parents and make them have dirty animal sex
 // to create a whole new generation
 type Breeder interface {
-	Breed(oldpop Population, sel Selector) Population
+	Breed(oldpop *Population, sel Selector) *Population
 }
 
 // The TwoParentBreeder uses 2 subjects as parents
@@ -20,13 +20,13 @@ func NewTwoParentBreeder() Breeder {
 	return new(TwoParentBreeder)
 }
 
-func (c *TwoParentBreeder) Breed(oldpop Population, sel Selector) (newpop Population) {
-	newpop.Subjects = make([]Subject, oldpop.Size())
+func (c *TwoParentBreeder) Breed(oldpop *Population, sel Selector) (newpop *Population) {
+	newpop = NewPopulation(oldpop.Size())
 	for i := range newpop.Subjects {
 		parents := sel.Select(2, oldpop)
 		crosspoint := int(rand.Float64() * float64(parents.Subjects[0].GenomeLength()))
 		g1, g2 := crossover(parents.Subjects[0].Genome, parents.Subjects[1].Genome, crosspoint)
-		newpop.Subjects[i] = Subject{Genome: selectAChild(g1, g2)}
+		newpop.Subjects[i] = &Subject{Genome: selectAChild(g1, g2)}
 	}
 	return
 }
