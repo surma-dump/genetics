@@ -30,25 +30,28 @@ func (a *Algorithm) PopulationSize() int {
 // and inits every subject using the Initializer
 func (a *Algorithm) Init() {
 	a.Population.Subjects = make([]Subject, a.PopulationSize())
-	sum := Fitness(0.0)
+	a.Population.FitnessSum = Fitness(0.0)
 	for i := range a.Population.Subjects {
 		a.Population.Subjects[i] = Subject{Genome: a.Initializer.NewGenome(a.GenomeLength)}
 		a.Population.Subjects[i].Fitness = a.Evaluator.Evaluate(a.Population.Subjects[i])
-		sum += a.Population.Subjects[i].Fitness
+		a.Population.FitnessSum += a.Population.Subjects[i].Fitness
 	}
-	a.Population.FitnessSum = sum
+	return
 }
 
 // Creates the next generation
-// At this point, the populations has to be evaluated already
-func (a *Algorithm) Next() {
+func (a *Algorithm) CreateNextGeneration() Population {
 	newpop := a.Breeder.Breed(a.Population, a.Selector)
-	sum := Fitness(0.0)
+	newpop.FitnessSum = Fitness(0.0)
 	for i := range newpop.Subjects {
 		newpop.Subjects[i] = a.Mutator.Mutate(newpop.Subjects[i])
 		newpop.Subjects[i].Fitness = a.Evaluator.Evaluate(newpop.Subjects[i])
-		sum += newpop.Subjects[i].Fitness
+		newpop.FitnessSum += newpop.Subjects[i].Fitness
 	}
-	a.Population = newpop
-	a.Population.FitnessSum = sum
+	return newpop
+}
+
+// Replaces the old population with the new one
+func (a *Algorithm) Evolve() {
+	a.Population = a.CreateNextGeneration()
 }
